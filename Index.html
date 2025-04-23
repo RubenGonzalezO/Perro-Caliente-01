@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Modelo prueba 3D</title>
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
+      background-color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      margin-top: 40px;
+      font-size: 70px; /* Antes 20px, ahora +300% */
+      text-align: center;
+    }
+
+    model-viewer {
+      width: 100%;
+      max-width: 1400px; /* Aumentado */
+      height: 1200px;    /* Aumentado */
+      background-color: transparent;
+      margin-top: 20px;
+      --ar-button-scale: 2;
+    }
+
+    .large-viewer {
+      max-width: 95vw !important;
+      height: 85vh !important;
+    }
+
+    button {
+      margin: 20px;
+      padding: 20px 40px; /* Aumentado */
+      font-size: 50px;    /* Antes 16px → +300% */
+      background-color: #1e88e5;
+      color: white;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #1565c0;
+    }
+
+    model-viewer::part(default-ar-button),
+    model-viewer::part(ar-button) {
+      transform: scale(3); /* Cubo AR aumentado 350% */
+    }
+
+    model-viewer::part(camera-controls) {
+      transform: scale(2);
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Modelo prueba 3D</h1>
+
+  <model-viewer id="viewer"
+    src="Perro Camaron.glb"
+    alt="Modelo 3D del plato"
+    camera-controls
+    auto-rotate
+    ar
+    ar-modes="scene-viewer webxr quick-look"
+    ar-placement="floor"
+    placement="floor"
+    shadow-intensity="1"
+    environment-image="neutral"
+    exposure="1">
+  </model-viewer>
+
+  <button id="actionButton">Ver en tu espacio</button>
+
+  <script>
+    const viewer = document.getElementById('viewer');
+    const button = document.getElementById('actionButton');
+
+    const isARSupported = () => {
+      const ua = navigator.userAgent.toLowerCase();
+      return /android|iphone|ipad/.test(ua);
+    };
+
+    if (isARSupported()) {
+      // Compatible con AR
+      button.onclick = () => viewer.activateAR();
+    } else {
+      // No compatible con AR
+      viewer.classList.add('large-viewer');
+      button.textContent = "Ver en 3D";
+      button.onclick = () => viewer.scrollIntoView({ behavior: 'smooth' });
+    }
+  </script>
+
+</body>
+</html>
